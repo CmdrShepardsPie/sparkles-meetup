@@ -65,7 +65,7 @@ class App {
         consumerSecret: secrets.consumerSecret,
         callbackURL: 'http://localhost:9000/auth/meetup/callback'
       }, (token, tokenSecret, profile, done) => {
-        console.log('verify', token, tokenSecret, profile, done);
+        // console.log('verify', token, tokenSecret, profile, done);
         done(null, profile);
       }
     ));

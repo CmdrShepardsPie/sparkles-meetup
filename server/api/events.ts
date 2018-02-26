@@ -6,7 +6,6 @@ import * as secrets from 'config/secrets.json';
 export default (router: express.Router) => router.get('/api/groups/:groupName/events',
   ensureAuthenticated,
   async (req, res, next) => {
-    console.log('group', req.params.groupName);
     const params = {
       'sign': true,
       'key': secrets.key,
