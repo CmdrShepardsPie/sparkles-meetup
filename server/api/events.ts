@@ -3,7 +3,7 @@ import * as express from 'express';
 import { ensureAuthenticated } from '../misc';
 import * as secrets from 'config/secrets.json';
 
-export default (router: express.Router) => router.get('/api/:groupName/events',
+export default (router: express.Router) => router.get('/api/groups/:groupName/events',
   ensureAuthenticated,
   async (req, res, next) => {
     console.log('group', req.params.groupName);
@@ -37,6 +37,8 @@ export default (router: express.Router) => router.get('/api/:groupName/events',
     };
     const parsPast = Object.entries(paramsPast).map(param => `${param[0]}=${param[1]}`).join('&');
     const urlPast = `https://api.meetup.com/${req.params.groupName}/events?${parsPast}`;
+
+    console.log('events', url);
 
     const events = await Promise.all([
       axios.get(url),

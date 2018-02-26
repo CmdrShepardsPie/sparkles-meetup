@@ -43,8 +43,8 @@ export default class Group extends Vue {
   private async getData() {
     // const pars = Object.entries(params).map(param => `${param[0]}=${param[1]}`).join('&');
     try {
-      this.group = await (await fetch(`/api/${this.groupName}`, { credentials: 'include' })).json();
-      this.eventData = await (await fetch(`/api/${this.groupName}/events`, { credentials: 'include' })).json();
+      this.group = await (await fetch(`/api/groups/${this.groupName}`, { credentials: 'include' })).json();
+      this.eventData = await (await fetch(`/api/groups/${this.groupName}/events`, { credentials: 'include' })).json();
     } catch (e) {
       window.location.assign('/auth/meetup');
     }

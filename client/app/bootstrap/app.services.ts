@@ -1,5 +1,5 @@
-import serviceContainer from 'client-services/service-container';
-import ServiceIdentifiers from 'client-services/service-identifiers';
+import serviceContainer from 'services/service-container';
+import ServiceIdentifiers from 'services/service-identifiers';
 
 const services = {
 };

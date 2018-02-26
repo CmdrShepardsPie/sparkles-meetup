@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import ServiceIdentifiers from 'client-services/service-identifiers';
+import ServiceIdentifiers from 'services/service-identifiers';
 
 const serviceContainer = new Container();
 

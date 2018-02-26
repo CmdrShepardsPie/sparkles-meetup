@@ -46,8 +46,8 @@ export default class Event extends Vue {
 
   private async getData() {
     try {
-      this.eventData = await (await fetch(`/api/${this.groupName}/events/${this.eventId}`, { credentials: 'include' })).json();
-      this.commentData = await (await fetch(`/api/${this.groupName}/events/${this.eventId}/comments`, { credentials: 'include' })).json();
+      this.eventData = await (await fetch(`/api/groups/${this.groupName}/events/${this.eventId}`, { credentials: 'include' })).json();
+      this.commentData = await (await fetch(`/api/groups/${this.groupName}/events/${this.eventId}/comments`, { credentials: 'include' })).json();
     } catch (e) {
       window.location.assign('/auth/meetup');
     }
