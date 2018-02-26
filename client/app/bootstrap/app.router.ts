@@ -11,8 +11,7 @@ const router = new VueRouter({
   routes: [
     { name: 'groups', path: '/groups', component: Groups },
     { name: 'group', path: '/groups/:groupName', component: Group, props: true },
-    { name: 'event', path: '/groups/:groupName/events/:eventId', component: Event, props: true },
-    { path: '/', redirect: { name: 'groups' } }
+    { name: 'event', path: '/groups/:groupName/events/:eventId', component: Event, props: true }
   ]
 });
 

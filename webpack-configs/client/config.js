@@ -88,19 +88,19 @@ module.exports = (env, root) => ({
         ...require('../misc/extract-text').getAll(),
         // Further extract the critical CSS and inline it into the index.html
         // TODO: This broke and I don't know why (yet)
-        // new HtmlCriticalPlugin({
-        //   base: path.resolve(root, 'dist/client'),
-        //   src: 'index.html',
-        //   dest: 'index.html',
-        //   inline: true,
-        //   minify: true,
-        //   // extract: true,
-        //   width: 1440,
-        //   height: 900,
-        //   penthouse: {
-        //     blockJSRequests: false
-        //   }
-        // })
+        new HtmlCriticalPlugin({
+          base: path.resolve(root, 'dist/client'),
+          src: 'index.html',
+          dest: 'index.html',
+          inline: true,
+          minify: true,
+          // extract: true,
+          width: 1440,
+          height: 900,
+          penthouse: {
+            blockJSRequests: false
+          }
+        })
       ]
       // 'development' (dev) mode, no additional plugins
       : [])
