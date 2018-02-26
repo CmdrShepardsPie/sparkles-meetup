@@ -1,0 +1,87 @@
+@import '~styles/globals';
+
+.group {
+  //min-width: 100vw;
+  //min-height: 100vh;
+  //background: #aaa;
+  position: relative;
+
+  .filter {
+    width: 100%;
+    height: 40px;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+  }
+
+  .group-info {
+    position: relative;
+    top: 3em;
+    padding: 10px;
+  }
+
+  .name {
+  }
+
+  .where {
+  }
+
+  .date {
+  }
+
+  .duration {
+  }
+
+  .rsvp {
+    height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+
+    > div {
+      border-bottom: 1px solid #aaa;
+      text-align: center;
+      padding: 5px;
+      flex-grow: 1;
+      flex-shrink: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:last-of-type {
+        border-bottom: 0 none;
+      }
+    }
+  }
+
+  .stats {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+
+    > div {
+      border-right: 1px solid #aaa;
+      text-align: center;
+      padding: 5px;
+      flex-grow: 1;
+      flex-shrink: 1;
+      width: 33%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:last-of-type {
+        border-right: 0 none;
+      }
+    }
+  }
+
+  .rsvp-yes {
+    background-color: #0f0;
+  }
+
+  .rsvp-no {
+    background-color: #f00;
+  }
+}

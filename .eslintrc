@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "standard"
+  ],
+  "rules": {
+    "semi": [ "warn", "always" ],
+    "no-console": 0,
+    "no-debugger": 0,
+    "space-before-function-paren": [ "warn", {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
+    "no-multi-spaces": 0
+  }
+}

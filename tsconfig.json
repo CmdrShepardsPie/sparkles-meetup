@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "preserveConstEnums": true,
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "pretty": true,
+    "strict": true,
+    "strictFunctionTypes": false,
+    "strictPropertyInitialization": false,
+    "baseUrl": "./",
+    "paths": {
+      "assets/*": ["./client/app/assets/*"],
+      "components/*": ["./client/app/components/*"],
+      "containers/*": ["./client/app/containers/*"],
+      "services/*": ["./client/app/services/*"],
+      "styles/*": ["./client/app/styles/*"],
+
+      "config/*": ["./config/*"],
+      "data/*": ["./data/*"],
+      "client/*": ["./client/app/*"],
+      "server/*": ["./server/*"]
+    }
+  }
+}

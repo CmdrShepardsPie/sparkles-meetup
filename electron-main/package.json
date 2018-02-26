@@ -1,0 +1,6 @@
+{
+  "name": "sparkles-meetup",
+  "version": "0.1.0",
+  "description": "Sparkles' Better Meetup Client",
+  "main": "electron-main.js"
+}

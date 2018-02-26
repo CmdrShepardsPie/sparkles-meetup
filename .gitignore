@@ -1,0 +1,8 @@
+node_modules/
+.idea/
+.tmp/
+dist/
+npm-debug.log
+.DS_Store
+.awcache
+secrets.json

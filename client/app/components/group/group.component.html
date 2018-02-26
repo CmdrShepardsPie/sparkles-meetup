@@ -1,0 +1,46 @@
+<div class="group">
+  <input type="text" class="filter" v-model="eventFilter" placeholder="Filter by Event Name">
+  <div class="group-info">
+    <router-link :to="{ name: 'groups' }" class="nav-back">Back to groups</router-link><br><br>
+    <div class="group-name">
+      {{group.name}}<br>
+      {{group.localized_location}}<br>
+      {{group.organizer && group.organizer.name}}<br>
+      {{group.members}} {{group.who}}<br>
+    </div>
+    <div v-html="group.description"></div>
+    <grid :data="events" @item-clicked="eventClicked">
+      <template slot="grouped-title" scope="grouped">
+        {{grouped.title | capitalize}}
+      </template>
+      <template slot="grid-item" scope="event">
+        <div :class="[ 'rsvp', event.self.rsvp && `rsvp-${event.self.rsvp.response}`]">
+          <div class="name">
+            {{event.name && event.name || '&nbsp;'}}
+          </div>
+          <div class="where">
+            {{event.venue && event.venue.name || '&nbsp;'}}
+          </div>
+          <div class="date">
+            <span v-if="event.time">
+              {{event.time / 1000 | moment("ddd, MMM Do YYYY, h:mm a") }}
+              ({{event.time / 1000 | moment("from", "now") }})
+            </span>
+            <span v-else>&nbsp;</span>
+          </div>
+          <div class="duration">
+            <span v-if="event.duration">
+              {{(event.time / 1000) + (event.duration / 1000) | moment("from", (event.time), true) }}
+            </span>
+            <span v-else>&nbsp;</span>
+          </div>
+          <div class="stats">
+            <div>{{event.waitlist_count}} waitlist</div>
+            <div>{{event.yes_rsvp_count}} yes</div>
+            <div>{{event.rsvp_limit || 'No'}} limit</div>
+          </div>
+        </div>
+      </template>
+    </grid>
+  </div>
+</div>

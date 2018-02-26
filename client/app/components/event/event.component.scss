@@ -1,0 +1,16 @@
+@import '~styles/globals';
+
+.event {
+  .event-info {
+    padding: 10px;
+  }
+
+  .event-venue {
+    padding-top: 1em;
+  }
+
+  .comment,
+  .reply {
+    padding: 10px;
+  }
+}

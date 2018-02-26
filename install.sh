@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+npm install --save-dev body-parser
+ npm install --save-dev @types/body-parser
+npm install --save-dev cookie-parser
+ npm install --save-dev @types/cookie-parser
+npm install --save-dev express
+ npm install --save-dev @types/express
+npm install --save-dev express-session
+ npm install --save-dev @types/express-session
+npm install --save-dev passport
+ npm install --save-dev @types/passport
+npm install --save-dev passport-local
+ npm install --save-dev @types/passport-local
+npm install --save-dev passport-meetup
+ npm install --save-dev @types/passport-meetup
+npm install --save-dev request
+ npm install --save-dev @types/request
+npm install --save-dev rxjs
+ npm install --save-dev @types/rxjs
+npm install --save-dev serve-static
+ npm install --save-dev @types/serve-static
