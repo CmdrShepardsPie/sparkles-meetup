@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = (env, root) => ([
+const path = require('path');
+
+module.exports = (env, paths) => ([
   {
     // BABEL LOADER
     // Reference: https://github.com/babel/babel-loader
@@ -20,7 +22,8 @@ module.exports = (env, root) => ([
           cacheDirectory: true // Cache compilation
         }
       }
-    ]
+    ],
+    ...(/dev/i.test(env) ? { exclude: [ path.join(paths.root, 'node_modules') ] } : {})
   },
   {
     // TYPESCRIPT LOADER
@@ -43,6 +46,7 @@ module.exports = (env, root) => ([
       },
       // See tsconfig.json for configuration
       'ts-loader'
-    ]
+    ],
+    ...(/dev/i.test(env) ? { exclude: [ path.join(paths.root, 'node_modules') ] } : {})
   }
 ]);

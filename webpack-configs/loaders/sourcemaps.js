@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (env, root) => ([
+module.exports = (env, paths) => ([
   {
     // SOURCE MAP LOADER
     // Reference: https://github.com/webpack-contrib/source-map-loader

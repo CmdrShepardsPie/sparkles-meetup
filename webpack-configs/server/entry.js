@@ -2,4 +2,9 @@
 
 const path = require('path');
 
-module.exports = (env, root) => path.join(root, 'server/index.ts');
+module.exports = (env, paths) => (
+  [
+    path.join(paths.serverSrc, 'polyfills.js'),
+    path.join(paths.serverSrc, 'index.ts')
+  ]
+);

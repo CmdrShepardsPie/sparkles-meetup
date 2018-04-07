@@ -1,12 +1,16 @@
 'use strict';
 
-const webpack = require('webpack');
 const path = require('path');
-const CommonsChunkPlugin  = webpack.optimize.CommonsChunkPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin  = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const HtmlCriticalPlugin  = require('html-critical-webpack-plugin');
+// const HtmlCriticalPlugin  = require('html-critical-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+// const BundleAnalyzerPlugin  = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin  = require('mini-css-extract-plugin');
+const ManifestPlugin  = require('webpack-manifest-plugin');
+const SriPlugin = require('webpack-subresource-integrity');
 
 const entry = require('./entry');
 const output  = require('./output');
@@ -18,91 +22,80 @@ const code  = require('../loaders/code');
 const assets  = require('../loaders/assets');
 const html  = require('../loaders/html');
 
-// Env is environment string ('production' or 'development')
-// Root is the root of the application, passed because '__dirname'
-//   is the directory of the current js file, not the root execution directory
-module.exports = (env, root) => ({
+// const Extractor = require('../misc/extractor');
+// const extractor = new Extractor();
+
+module.exports = (env, paths) => ({
   cache: true,
-  context: root,
-  entry: entry(env, root),
-  output: output(env, root),
-  resolve: resolve(env, root),
+  context: paths.root,
+  entry: entry(env, paths),
+  output: output(env, paths),
+  resolve: resolve(env, paths),
   module: {
     rules: [
-      ...linting(env, root),
-      ...sourcemaps(env, root),
-      ...code(env, root),
-      ...html(env, root),
-      // Use the 'extracting' version of the styles loader if in production (dist)
-      ...(/dist/i.test(env) ? require('../loaders/styles-extract') : require('../loaders/styles'))(env, root),
-      ...assets(env, root)
+      ...linting(env, paths),
+      ...sourcemaps(env, paths),
+      ...code(env, paths),
+      ...html(env, paths),
+      // Extract css in 'production' (dist) mode
+      ...(/dist/i.test(env)
+        ? require('../loaders/styles-extract')
+        : require('../loaders/styles'))(env, paths),
+      ...assets(env, paths)
     ]
   },
   plugins: [
-    // Style Lint all .scss, .sass, and .css files
-    // Plugin is preferred over loader so it'll run on all files,
-    //   instead of just imported/included files
-    // See .stylelintrc  for configuration
-    new StyleLintPlugin({
-      files: [path.resolve(root, 'client/app/**/*.s?(a|c)ss')],
-      emitErrors: false
-    }),
-    // Delete the dist/client folder to start fresh
-    new CleanWebpackPlugin(['dist/client'], { root }),
-    // Create a 'vendor' chunk from our 'app' entry so node_modules libraries are in their own file
-    new CommonsChunkPlugin({
-      // Name of the bundle (vendor.js)
-      name: 'vendor',
-      // Only analyze the app entry point, we don't want to change the others
-      chunks: ['app'],
-      // Check if module name is a string and is in node_modules
-      minChunks: (module) => typeof module.userRequest === 'string' && /node_modules/.test(module.userRequest.split('!').pop())
-    }),
-    // Add all the CSS and JavaScript chunk references to index.html
+    new CleanWebpackPlugin([paths.clientDist], { root: paths.root }),
+    // new CopyWebpackPlugin([
+    //   // { from: 'index.html', to: paths.clientDist },
+    //   // { from: 'assets/logos', to: path.join(paths.clientDist, 'assets/logos/[name].content_[hash:5].[ext]') }
+    // ], { context: paths.clientSrc }),
     new HtmlWebpackPlugin({
-      // Input
-      template: path.resolve(root, 'client/app/_index.html'),
+      template: path.join(paths.clientSrc, '_app_index.html'),
       // Output (configured in client/output.js)
-      filename: 'index.html',
-      // Sort the chunks (individual JS and CSS output files) so they load in the right order
-      chunksSortMode: (left, right) => {
-        // Priority from left to right, with polyfills loading before vendor (Vue, etc.) before app
-        const entryPoints = ['polyfills', 'vendor', 'app'];
-        // Sorting 'algorithm'
-        const leftIndex = entryPoints.indexOf(left.names[0]);
-        const rightIndex = entryPoints.indexOf(right.names[0]);
-        if (leftIndex > rightIndex) {
-          return 1;
-        } else if (leftIndex < rightIndex) {
-          return -1;
-        } else {
-          return 0;
-        }
-      }
+      filename: 'index.html'
     }),
     // If in 'production' (dist) mode
     ...(/dist/i.test(env)
       ? [
-        // Bring in extract text plugins to put the core CSS in its own file
-        // Extractions are generated in loaders/styles-extract.js
-        ...require('../misc/extract-text').getAll(),
-        // Further extract the critical CSS and inline it into the index.html
-        // TODO: This broke and I don't know why (yet)
-        new HtmlCriticalPlugin({
-          base: path.resolve(root, 'dist/client'),
-          src: 'index.html',
-          dest: 'index.html',
-          inline: true,
-          minify: true,
-          // extract: true,
-          width: 1440,
-          height: 900,
-          penthouse: {
-            blockJSRequests: false
-          }
-        })
+        // See .stylelintrc  for configuration
+        // Stylelint is broken in dev mode, so only run it for dist
+        new StyleLintPlugin({
+          files: [path.join(paths.clientSrc, '**/*.s?(a|c)ss')],
+          emitErrors: false
+        }),
+        // Output extracted CSS
+        new MiniCssExtractPlugin({
+          filename: 'styles/[name]/[name].build_[hash:5].css',
+          // .content_[contenthash:5]
+          chunkFilename: 'styles/[name]/[name].chunk_[chunkhash:5].css'
+        }),
+        // Compress output files to gzip
+        new CompressionPlugin({
+          cache: true,
+          minRatio: 2,
+          // deleteOriginalAssets: true
+        }),
+        new ManifestPlugin(),
+        new SriPlugin({
+          hashFuncNames: ['sha256']
+        }),
       ]
       // 'development' (dev) mode, no additional plugins
-      : [])
-  ]
+      : []),
+    // new BundleAnalyzerPlugin()
+  ],
+
+  // If in 'production' (dist) mode
+  ...(/dist/i.test(env)
+    ? {
+      optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+          chunks: 'all'
+        },
+      },
+    }
+    // 'development' (dev) mode, no chunks
+    : {})
 });

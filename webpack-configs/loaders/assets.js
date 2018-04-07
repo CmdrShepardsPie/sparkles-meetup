@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-module.exports = (env, root) => ([
+module.exports = (env, paths) => ([
   {
     test: /\.(svg|png|jpg|jpeg|gif)([?]?.*)$/,
 
@@ -13,8 +13,9 @@ module.exports = (env, root) => ([
         loader: 'file-loader',
         options: {
           // limit: 8192,
-          context: path.resolve(root, 'client'),
-          name: 'assets/images/[name].[ext]' // Exported file name mask
+          context: paths.clientSrc,
+          name: '[name].content_[hash:5].[ext]',
+          outputPath: 'assets/images'
         }
       }
     ]
@@ -29,8 +30,9 @@ module.exports = (env, root) => ([
         loader: 'file-loader',
         options: {
           // limit: 8192,
-          context: path.resolve(root, 'client'),
-          name: 'assets/fonts/[name].[ext]' // Exported file name mask
+          context: paths.clientSrc,
+          name: '[name].content_[hash:5].[ext]',
+          outputPath: 'assets/fonts'
         }
       }
     ]
@@ -45,8 +47,9 @@ module.exports = (env, root) => ([
         loader: 'file-loader',
         options: {
           // limit: 8192,
-          context: path.resolve(root, 'client'),
-          name: 'assets/videos/[name].[ext]' // Exported file name mask
+          context: paths.clientSrc,
+          name: '[name].content_[hash:5].[ext]',
+          outputPath: 'assets/videos'
         }
       }
     ]

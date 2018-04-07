@@ -17,16 +17,19 @@
     "strictPropertyInitialization": false,
     "baseUrl": "./",
     "paths": {
-      "assets/*": ["./client/app/assets/*"],
-      "components/*": ["./client/app/components/*"],
-      "containers/*": ["./client/app/containers/*"],
-      "services/*": ["./client/app/services/*"],
-      "styles/*": ["./client/app/styles/*"],
+      "@helpers/*": ["./src/helpers/*"],
 
-      "config/*": ["./config/*"],
-      "data/*": ["./data/*"],
-      "client/*": ["./client/app/*"],
-      "server/*": ["./server/*"]
+      "@client/*": ["./src/client/*"],
+      "@server/*": ["./src/server/*"],
+      "@data/*": ["./src/data/*"],
+      "@config/*": ["./src/config/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+
+      "@assets/*": ["./src/client/assets/*"],
+      "@components/*": ["./src/client/components/*"],
+      "@containers/*": ["./src/client/containers/*"],
+      "@services/*": ["./src/client/services/*"],
+      "@styles/*": ["./src/client/styles/*"]
     }
   }
 }

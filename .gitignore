@@ -5,4 +5,4 @@ dist/
 npm-debug.log
 .DS_Store
 .awcache
-secrets.json
+src/config/secrets.json

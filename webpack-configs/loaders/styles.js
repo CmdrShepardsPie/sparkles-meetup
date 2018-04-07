@@ -1,12 +1,12 @@
 'use strict';
 
-const StringReplacePlugin = require('string-replace-webpack-plugin');
+const path = require('path');
 
-module.exports = (env, root) => ([
+module.exports = (env, paths) => ([
   {
     // Loaders that transform css into a format for webpack consumption should be post loaders (enforce: 'post')
     enforce: 'post',
-    test: /\.s?(a|c)ss$/,
+    test: /\.(sass)|(scss)|(css)$/,
     use: [
       {
         loader: 'vue-style-loader',
@@ -16,28 +16,36 @@ module.exports = (env, root) => ([
           sourceMap: true
         }
       },
-      StringReplacePlugin.replace({
-        replacements: [
-          {
-            pattern: new RegExp(root, 'g'),
-            replacement: function (match, p1, offset, string) {
-              return '';
-            }
-          }
-        ]
-      }),
       {
         loader: 'css-loader',
+        options: {
+          sourceMap: true,
+          minimize: true
+        }
+      }
+    ]
+  },
+  {
+    // The loaders that compile to css (postcss and sass in this case) should be left as normal loaders
+    test: /\.css$/,
+    use: [
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true
+        }
+      },
+      {
+        loader: 'resolve-url-loader',
         options: {
           sourceMap: true
         }
       }
     ]
   },
-  // We needed to split the rule for .scss files across two rules
   {
     // The loaders that compile to css (postcss and sass in this case) should be left as normal loaders
-    test: /\.s(a|c)ss$/,
+    test: /\.(sass)|(scss)$/,
     use: [
       {
         loader: 'postcss-loader',
@@ -58,5 +66,30 @@ module.exports = (env, root) => ([
         }
       }
     ]
-  }
+  },
+  // {
+  //   // The loaders that compile to css (postcss and stylus in this case) should be left as normal loaders
+  //   test: /\.styl$/,
+  //   use: [
+  //     {
+  //       loader: 'postcss-loader',
+  //       options: {
+  //         sourceMap: true
+  //       }
+  //     },
+  //     {
+  //       loader: 'resolve-url-loader',
+  //       options: {
+  //         sourceMap: true
+  //       }
+  //     },
+  //     {
+  //       loader: 'stylus-loader',
+  //       options: {
+  //         sourceMap: true,
+  //         preferPathResolver: true
+  //       }
+  //     }
+  //   ]
+  // }
 ]);

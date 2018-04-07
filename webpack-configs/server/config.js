@@ -1,13 +1,11 @@
 'use strict';
 
 // See client/config.js for more comprehensive comments
-
-const webpack = require('webpack');
-// const path = require('path');
 const fs  = require('fs');
+const path = require('path');
 const CleanWebpackPlugin  = require('clean-webpack-plugin');
 const NodemonPlugin = require('nodemon-webpack-plugin');
-const NameAllModulesPlugin  = require('name-all-modules-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const entry = require('./entry');
 const output  = require('./output');
@@ -18,31 +16,45 @@ const sourcemaps  = require('../loaders/sourcemaps');
 const code  = require('../loaders/code');
 const assets  = require('../loaders/assets');
 
-module.exports = (env, root) => ({
+module.exports = (env, paths) => ({
   cache: true,
-  context: root,
+  context: paths.root,
   target: 'node',
-  externals: fs.readdirSync('node_modules')
+  // node: false, // Node polyfills and mocks (enabled by default for web browsers, want them disabled for node)
+  externals: fs.readdirSync(path.join(paths.root, 'node_modules'))
     .filter(x => ['.bin'].indexOf(x) === -1)
     .reduce((prev, mod) => { prev[mod] = 'commonjs ' + mod; return prev; }, {}),
-  entry: entry(env, root),
-  output: output(env, root),
-  resolve: resolve(env, root),
+  entry: entry(env, paths),
+  output: output(env, paths),
+  resolve: resolve(env, paths),
   module: {
     rules: [
-      ...linting(env, root),
-      ...sourcemaps(env, root),
-      ...code(env, root),
-      ...assets(env, root)
+      ...linting(env, paths),
+      ...sourcemaps(env, paths),
+      ...code(env, paths),
+      ...assets(env, paths)
     ]
   },
-
-  // WebPack plugin configuration
   plugins: [
-    // CleanWebpackPlugin deletes the dist folder before build
-    new CleanWebpackPlugin(['dist/server'], { root }),
+    new CleanWebpackPlugin([paths.serverDist], { root: paths.root }),
+    // new CopyWebpackPlugin([
+    //   { from: '**/*', to: paths.dbDist }
+    // ], { context: paths.dbSrc }),
+    new NodemonPlugin({
+      nodeArgs: [ '--inspect' ]
+    })
+  ],
 
-    // Run node (server) and keep it running, restart if files changed
-    new NodemonPlugin()
-  ]
+  // If in 'production' (dist) mode
+  // ...(/dist/i.test(env)
+  //   ? {
+  //     optimization: {
+  //       runtimeChunk: false,
+  //       splitChunks: {
+  //         chunks: 'all'
+  //       }
+  //     }
+  //   }
+  //   // 'development' (dev) mode, no chunks
+  //   : {})
 });

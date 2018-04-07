@@ -1,4 +1,4 @@
-# sparkles-meetup
+# better-meetupper
 
 TODO: Put banner here.
 
@@ -8,7 +8,7 @@ TODO: Put banner here.
 
 TODO: Put more badges here.
 
-> Sparkles' Better Meetup Client
+> Better Meetupper
 
 TODO: Fill out long description.
 
@@ -30,20 +30,26 @@ TODO: Fill out long description.
 
 ## File Structure
 
-- client          ` Client-side files directory `
-    - app           ` App-specific code and files `
-        - components  ` Components to be embedded in pages and other components `
-        - pages       ` Components to be used as pages `
-        - services    ` Application services (data, etc.) that are created and included with Inversify `
-        - styles      ` Global and base application styles `
-    - assets        ` Images, icons, fonts, etc. `
-    - config        ` Application configuration files `
-- dist            ` Output directory when building a re-distributable/"prod" build `
-- node_modules    ` Installation directory for node modules (package.json) `
-- scripts         ` Build (non application) scripts `
-- server          ` Simple express.js script to serve files from dist directory for Docker deployment `
-- webpack-configs ` Common directory for individual pieces of the WebPack build configuration `
-    - loaders       ` WebPack loader configuration (perform processing on individual file types; .js, .scss, .html, etc.) `
+- dist
+- scripts
+- src
+    - client
+        - assets
+        - bootstrap
+        - components
+        - containers
+        - interfaces
+        - mixins
+        - services
+            - api
+        - styles
+    - config
+    - db
+    - helpers
+    - interfaces
+    - server
+        - api
+- webpack-configs
 
 ## Security
 
@@ -61,14 +67,18 @@ npm install
 
 ## Usage
 
-Run webpack dev server:
-```
-npm start
-```
+```bash
+# Install dependencies
+npm install
 
-Produce minified distributable:
-```
+# Build and run for development <your-ip>:5280 and localhost:5280
+npm run dev
+
+# Build for production distribution
 npm run dist
+
+# Start production server
+npm start
 ```
 
 ## API

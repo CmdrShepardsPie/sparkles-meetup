@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-module.exports = (env, root) => ([
+module.exports = (env, paths) => ([
   {
     // HTML LOADER
     // Reference: https://github.com/webpack/html-loader
@@ -17,13 +17,14 @@ module.exports = (env, root) => ([
         loader: 'vue-template-loader',
         options: {
           scoped: true,
-          hmr: true,
+          minimize: true,
+          // hmr: true,
           // Emit source-maps
           sourceMap: true,
           // Export as an es6 module default for better WebPack support
           exportAsEs6Default: true,
           // Root project path to resolve relative files
-          // root: path.resolve(root, 'client'),
+          // root: path.join(root, 'client'),
           transformToRequire: {
             // The key should be an element name
             // The value should be an attribute name or an array of attribute names
@@ -34,6 +35,6 @@ module.exports = (env, root) => ([
         }
       }
     ],
-    exclude: [ path.resolve(root, 'client/app/_index.html') ]
+    exclude: [ path.join(paths.clientSrc, '_app_index.html'), path.join(paths.clientSrc, 'index.html') ]
   }
 ]);

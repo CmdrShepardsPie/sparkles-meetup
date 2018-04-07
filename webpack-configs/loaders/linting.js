@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-module.exports = (env, root) => ([
+module.exports = (env, paths) => ([
   {
     // ES LINT LOADER
     // Reference: https://github.com/MoOx/eslint-loader
@@ -19,7 +19,7 @@ module.exports = (env, root) => ([
     use: [
       { loader: 'eslint-loader', options: { cache: true } }
     ],
-    exclude: [ path.resolve(root, 'node_modules') ]
+    include: [ paths.src ]
   },
   {
     // TS LINT LOADER
@@ -34,8 +34,8 @@ module.exports = (env, root) => ([
 
     // Use the tslint-loader, see tslint.json for configuration
     use: [
-      { loader: 'tslint-loader', options: { cache: true, typeCheck: true } }
+      { loader: 'tslint-loader', options: { cache: true, typeCheck: /dist/i.test(env) } }
     ],
-    exclude: [ path.resolve(root, 'node_modules') ]
+    include: [ paths.src ]
   }
 ]);

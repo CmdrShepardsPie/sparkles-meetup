@@ -1,11 +1,12 @@
 'use strict';
 
-const path = require('path');
+const path  = require('path');
+const util  = require('../misc/util');
 
-module.exports = (env, root) => ({
-  // WebPack should look for files/modules in the client folder first, followed by the node_modules folder
+module.exports = (env, paths) => ({
+  // WebPack should look for files/modules in the server folder first, followed by the node_modules folder
   modules: [
-    path.resolve(root, 'server'),
+    path.join(paths.serverSrc),
     'node_modules'
   ],
 
@@ -14,16 +15,7 @@ module.exports = (env, root) => ({
 
   // Create module aliases, so you can reference then without relative paths (import 'components/something')
   alias: {
-    // These aliases are only for WebPack, any general purpose path aliases need to be reflected in tsconfig.json too
-    assets: path.resolve(root, 'client/app/assets'),
-    components: path.resolve(root, 'client/app/components'),
-    containers: path.resolve(root, 'client/app/containers'),
-    services: path.resolve(root, 'client/app/services'),
-    styles: path.resolve(root, 'client/app/styles'),
-
-    config: path.resolve(root, 'config'),
-    data: path.resolve(root, 'data'),
-    client: path.resolve(root, 'client/app'),
-    server: path.resolve(root, 'server')
+    // Vue specific aliases to point to the ES6 module version of files
+    ...util.convertTSConfigPaths(paths, require(path.join(paths.root, 'tsconfig.json')))
   }
 });
